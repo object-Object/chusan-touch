@@ -231,9 +231,15 @@ void leap_handler(const LEAP_TRACKING_EVENT *ev) {
     chuni_ir_sensor_map = chuni_ir_map_local;
 }
 
+DWORD init(LPVOID _placeholder) {
+    chuni_io_jvs_init();
+    return 0;
+}
+
 HRESULT chuni_io_jvs_init(void) {
     // hook winproc
     HWND hwnd = FindWindowA(NULL, "teaGfx DirectX Release");
+    int err = GetLastError();
 
     // alloc console for debug output
     AllocConsole();
@@ -260,8 +266,16 @@ HRESULT chuni_io_jvs_init(void) {
         log_info("ignoring slider.offset in separate_control mode.\n");
     }
 
-    if (hwnd == NULL) log_error("can't get window handle for chuni.\n");
-    else if (!separate_control) {
+    if (hwnd == NULL) {
+        int a = 0;
+        log_error("can't get window handle for chuni. %d\n", err);
+        HANDLE thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) init, NULL, 0, NULL);
+        if (thread) {
+            log_info("started a thread to wait on window...\n");
+        }
+        return S_OK;
+    }
+    if (!separate_control) {
         ULONG flags;
         if (!IsTouchWindow(hwnd, &flags)) log_warn("IsTouchWindow() returned false, touch might not work.\n");
 #ifdef _WIN64
@@ -343,6 +357,13 @@ void chuni_io_jvs_set_coin_blocker(bool open) {
 
 }
 
+HRESULT chuni_io_led_init(void) {
+    log_info("init led...\n");
+    return S_OK;
+}
+
+void chuni_io_led_set_colors(void) {}
+
 HRESULT chuni_io_slider_init(void) {
     log_info("init slider...\n");
     return S_OK;
@@ -351,6 +372,7 @@ HRESULT chuni_io_slider_init(void) {
 void chuni_io_slider_start(chuni_io_slider_callback_t callback) {
     log_info("starting slider...\n");
     if (chuni_io_slider_thread != NULL) {
+        log_error("slider thread is NULL!\n");
         return;
     }
 
@@ -402,4 +424,8 @@ static unsigned int __stdcall chuni_io_slider_thread_proc(void* ctx) {
     }
 
     return 0;
+}
+
+uint16_t chuni_io_get_api_version(void) {
+    return 0x0100;
 }

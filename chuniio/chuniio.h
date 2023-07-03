@@ -30,10 +30,13 @@
 #pragma comment(lib, "d2d1.lib")
 
 typedef void (*chuni_io_slider_callback_t)(const uint8_t *state);
+uint16_t chuni_io_get_api_version(void);
 HRESULT chuni_io_jvs_init(void);
 void chuni_io_jvs_poll(uint8_t *opbtn, uint8_t *beams);
 void chuni_io_jvs_read_coin_counter(uint16_t *total);
 void chuni_io_jvs_set_coin_blocker(bool open);
+HRESULT chuni_io_led_init(void);
+void chuni_io_led_set_colors(void);
 HRESULT chuni_io_slider_init(void);
 void chuni_io_slider_start(chuni_io_slider_callback_t callback);
 void chuni_io_slider_set_leds(const uint8_t *rgb);
