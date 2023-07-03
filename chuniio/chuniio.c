@@ -242,10 +242,10 @@ HRESULT chuni_io_jvs_init(void) {
     int err = GetLastError();
 
     // alloc console for debug output
-    AllocConsole();
-    SetConsoleTitle("chuni-touch");
+    // AllocConsole();
+    // SetConsoleTitle("chuni-touch");
     FILE* fp;
-    freopen_s(&fp, "CONOUT$", "w", stdout);
+    // freopen_s(&fp, "CONOUT$", "w", stdout);
     log_info("allocated debug console.\n");
 
     WCHAR str_control_src[16];
