@@ -232,6 +232,8 @@ void leap_handler(const LEAP_TRACKING_EVENT *ev) {
 }
 
 DWORD init(LPVOID _placeholder) {
+    log_info("sleep for a sec.\n");
+    Sleep(1);
     chuni_io_jvs_init();
     return 0;
 }
