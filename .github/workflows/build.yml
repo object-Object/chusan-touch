@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: object-Object/LeapSDK
+          ref: main
+          token: ${{ secrets.LEAP_SDK_PAT }}
+          path: 3rdparty/LeapSDK
+      
+      - uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+      
+      - uses: BSFishy/meson-build@v1.0.3
+        with:
+          directory: build
+          action: build
+
+      - shell: bash
+        run: |
+          mkdir -p dist
+          cp build/chuniio/chuniio.dll dist/chusan-touch.dll
+          cp build/create-touch-window/ctw.dll dist
+          cp build/leap-configurator/leapconfig.exe dist
+          cp 3rdparty/LeapSDK/lib/x64/LeapC.dll dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist
