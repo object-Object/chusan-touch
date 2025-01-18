@@ -16,10 +16,6 @@ jobs:
           token: ${{ secrets.LEAP_SDK_PAT }}
           path: 3rdparty/LeapSDK
       
-      # - uses: egor-tensin/setup-mingw@v2
-      #   with:
-      #     platform: x64
-      
       - uses: BSFishy/meson-build@v1.0.3
         with:
           directory: build
