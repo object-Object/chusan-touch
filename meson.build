@@ -30,9 +30,9 @@ inc = include_directories('.')
 
 leap_inc = include_directories('3rdparty/LeapSDK/include')
 arch = 'x86'
-if host_machine.cpu_family() == 'x86_64'
-    arch = 'x64'
-endif
+# if host_machine.cpu_family() == 'x86_64'
+#     arch = 'x64'
+# endif
 leap_lib_path = meson.source_root() + '/3rdparty/LeapSDK/lib/' + arch
 leap_lib = cc.find_library('LeapC', dirs: leap_lib_path)
 d2d1_lib = cc.find_library('d2d1')
